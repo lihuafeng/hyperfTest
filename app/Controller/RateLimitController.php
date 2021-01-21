@@ -27,14 +27,6 @@ class RateLimitController
         return ["QPS 1, 峰值3"];
     }
 
-    /**
-     * @RequestMapping(path="test2")
-     * @RateLimit(create=2, consume=2, capacity=4)
-     */
-    public function test2()
-    {
-        return ["QPS 2, 峰值2"];
-    }
     public static function getClientKey()
     {
         echo "111";
