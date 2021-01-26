@@ -41,13 +41,8 @@ class RateLimitMiddleware implements MiddlewareInterface
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
     {
         $config = ApplicationContext::getContainer()->get(ConfigInterface::class);
+        $config->set('rate_limit.create',1);
         $rateLimitConfig = $config->get('rate_limit');
-        print_r("----config1----");
-        print_r($rateLimitConfig);
-        $config->set('rate_limit.create',2);
-        $rateLimitConfig = $config->get('rate_limit');
-        print_r("----config2----");
-        print_r($rateLimitConfig);
 //        make(ConfigInterface::class,$rateLimitConfig); //会重复定义常量
         Context::set(ConfigInterface::class, $rateLimitConfig);
         return $handler->handle($request);

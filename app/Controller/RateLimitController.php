@@ -5,10 +5,12 @@ namespace App\Controller;
 use Hyperf\Di\Aop\ProceedingJoinPoint;
 use Hyperf\HttpServer\Annotation\Controller;
 use Hyperf\HttpServer\Annotation\RequestMapping;
+use Hyperf\HttpServer\Contract\RequestInterface;
 use Hyperf\RateLimit\Annotation\RateLimit;
 use Hyperf\HttpServer\Annotation\Middlewares;
 use Hyperf\HttpServer\Annotation\Middleware;
 use App\Middleware\RateLimitMiddleware;
+use Hyperf\Utils\ApplicationContext;
 
 /**
  * @Controller(prefix="rate-limit")
@@ -29,13 +31,15 @@ class RateLimitController
 
     public static function getClientKey()
     {
-        echo "111";
-        return "123";
+        $request = ApplicationContext::getContainer()->get(RequestInterface::class);
+        $path = $request->getUri()->getPath();
+        $key = $request->getParsedBody()['key'];
+        return $path."_".$key;
     }
 
     public static function rateLimitCallback(float $seconds, ProceedingJoinPoint $proceedingJoinPoint)
     {
-        echo "222";
+        echo "###";
         return $proceedingJoinPoint->process();
     }
 }
