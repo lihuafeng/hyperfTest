@@ -16,6 +16,7 @@
         "hyperf/amqp": "~2.1.0",
         "hyperf/async-queue": "~2.1.0",
         "hyperf/cache": "~2.1.0",
+        "hyperf/circuit-breaker": "v2.1.0",
         "hyperf/command": "~2.1.0",
         "hyperf/config": "~2.1.0",
         "hyperf/constants": "~2.1.0",
@@ -31,7 +32,8 @@
         "hyperf/memory": "~2.1.0",
         "hyperf/process": "~2.1.0",
         "hyperf/rate-limit": "^2.1",
-        "hyperf/redis": "~2.1.0"
+        "hyperf/redis": "~2.1.0",
+        "hyperf/utils": "2.1.0"
     },
     "require-dev": {
         "swoole/ide-helper": "^4.5",
