@@ -12,6 +12,9 @@ use Hyperf\HttpServer\Annotation\Middleware;
 use App\Middleware\RateLimitMiddleware;
 use Hyperf\Utils\ApplicationContext;
 use App\Exception\ApiException;
+use Hyperf\DbConnection\Db;
+use Hyperf\Di\Annotation\Inject;
+use App\Service\UserService;
 
 /**
  * @Controller(prefix="rate-limit")
@@ -25,6 +28,14 @@ class RateLimitController
     {
         $this->commonAction();
         return ["QPS 1, 峰值3"];
+    }
+
+    /**
+     * @RequestMapping(path="user")
+     * 数据库测试
+     */
+    public function user(UserService $userService){
+        return $userService->getAllUserCache();
     }
 
     /**

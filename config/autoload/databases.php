@@ -13,10 +13,10 @@ return [
     'default' => [
         'driver' => env('DB_DRIVER', 'mysql'),
         'host' => env('DB_HOST', 'localhost'),
-        'database' => env('DB_DATABASE', 'hyperf'),
+        'database' => env('DB_DATABASE', 'test'),
         'port' => env('DB_PORT', 3306),
         'username' => env('DB_USERNAME', 'root'),
-        'password' => env('DB_PASSWORD', ''),
+        'password' => env('DB_PASSWORD', 'root'),
         'charset' => env('DB_CHARSET', 'utf8'),
         'collation' => env('DB_COLLATION', 'utf8_unicode_ci'),
         'prefix' => env('DB_PREFIX', ''),
@@ -27,6 +27,15 @@ return [
             'wait_timeout' => 3.0,
             'heartbeat' => -1,
             'max_idle_time' => (float) env('DB_MAX_IDLE_TIME', 60),
+        ],
+        'cache' => [
+            'handler' => \Hyperf\ModelCache\Handler\RedisHandler::class,
+            'cache_key' => 'mc:%s:m:%s:%s:%s',
+            'prefix' => 'default',
+            'ttl' => 3600 * 24,
+            'empty_model_ttl' => 3600,
+            'load_script' => true,
+            'use_default_value' => true,
         ],
         'commands' => [
             'gen:model' => [
