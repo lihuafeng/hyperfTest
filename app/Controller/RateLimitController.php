@@ -11,6 +11,7 @@ use Hyperf\HttpServer\Annotation\Middlewares;
 use Hyperf\HttpServer\Annotation\Middleware;
 use App\Middleware\RateLimitMiddleware;
 use Hyperf\Utils\ApplicationContext;
+use App\Exception\ApiException;
 
 /**
  * @Controller(prefix="rate-limit")
@@ -18,28 +19,49 @@ use Hyperf\Utils\ApplicationContext;
 class RateLimitController
 {
     /**
-     * @Middlewares({
-     *     @Middleware(RateLimitMiddleware::class)
-     * })
      * @RequestMapping(path="test")
-     * @RateLimit(key={RateLimitController::class, "getClientKey"}, limitCallback={RateLimitController::class, "rateLimitCallback"})
      */
     public function test()
     {
+        $this->commonAction();
         return ["QPS 1, 峰值3"];
     }
 
+    /**
+     * @RateLimit(key={RateLimitController::class, "getClientKey"}, limitCallback={RateLimitController::class, "rateLimitCallback"})
+     */
+    public function commonAction():int{
+        return 1;
+    }
+    /**
+     * @return string
+     * 令牌桶key生成
+     */
     public static function getClientKey()
     {
         $request = ApplicationContext::getContainer()->get(RequestInterface::class);
+        $params = $request->getParsedBody();
+        $key = '';
+        if($params && isset($params['key'])){
+            $key = $params['key'];
+        }else{
+            $params = $request->getQueryParams();
+            if($params && isset($params['key'])){
+                $key = $params['key'];
+            }
+        }
         $path = $request->getUri()->getPath();
-        $key = $request->getParsedBody()['key'];
-        return $path."_".$key;
+        if($key){
+            return $path."_".$key;
+        }else{
+            return $path;
+        }
     }
 
     public static function rateLimitCallback(float $seconds, ProceedingJoinPoint $proceedingJoinPoint)
     {
-        echo "###";
-        return $proceedingJoinPoint->process();
+        echo "####";
+        throw new ApiException("rate limit", 502);
+//        return $proceedingJoinPoint->process();
     }
 }

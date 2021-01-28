@@ -6,6 +6,7 @@ namespace App\Middleware;
 
 use Hyperf\Contract\ConfigInterface;
 use Hyperf\Di\Aop\ProceedingJoinPoint;
+use Hyperf\HttpServer\Router\Dispatched;
 use Hyperf\RateLimit\Annotation\RateLimit;
 use Hyperf\Utils\ApplicationContext;
 use Hyperf\Utils\Context;
@@ -40,11 +41,41 @@ class RateLimitMiddleware implements MiddlewareInterface
      */
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
     {
-        $config = ApplicationContext::getContainer()->get(ConfigInterface::class);
-        $config->set('rate_limit.create',1);
-        $rateLimitConfig = $config->get('rate_limit');
-//        make(ConfigInterface::class,$rateLimitConfig); //会重复定义常量
-        Context::set(ConfigInterface::class, $rateLimitConfig);
+        $params= $request->getParsedBody();
+        $key = '';
+        if($params && isset($params['key'])){
+            $key = $params['key'];
+        }else{
+            $params= $request->getQueryParams();
+            if($params && isset($params['key'])){
+                $key = $params['key'];
+            }
+        }
+        if($key){
+            /**
+             * 请求路由
+             */
+            $router = $request->getAttribute(Dispatched::class)->handler->callback;
+            if($router && is_array($router)){
+                $router = implode("@", $router);
+            }
+            $user = $this->userService->getUserAuthInfo($key, $router);
+            if($user){
+                $user = $user->toArray();
+                if($user['create'] && $user['capacity']){
+                    /**
+                     * 设置限流参数
+                     */
+                    $config = ApplicationContext::getContainer()->get(ConfigInterface::class);
+//                    $config->set('rate_limit.key',$key);
+                    $config->set('rate_limit.create',$user['create']);
+                    $config->set('rate_limit.capacity',$user['capacity']);
+                    $rateLimitConfig = $config->get('rate_limit');
+//                    make(ConfigInterface::class,$rateLimitConfig);//这样也可以 会报notice 重复定义常量
+                    Context::set(ConfigInterface::class, $rateLimitConfig);
+                }
+            }
+        }
         return $handler->handle($request);
     }
 
