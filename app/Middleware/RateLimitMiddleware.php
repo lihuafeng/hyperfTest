@@ -16,6 +16,9 @@ use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
 use Hyperf\Config\Config;
+use Hyperf\Logger\LoggerFactory;
+use Hyperf\HttpServer\Request;
+use Hyperf\Utils\Codec\Json;
 
 class RateLimitMiddleware implements MiddlewareInterface
 {
@@ -41,42 +44,90 @@ class RateLimitMiddleware implements MiddlewareInterface
      */
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
     {
-        $params= $request->getParsedBody();
-        $key = '';
-        if($params && isset($params['key'])){
-            $key = $params['key'];
-        }else{
-            $params= $request->getQueryParams();
-            if($params && isset($params['key'])){
-                $key = $params['key'];
+        $time = microtime(true);
+        try{
+            $response = $handler->handle($request);
+        }catch (\Throwable $exception){
+            throw $exception;
+        } finally {
+            $logger = $this->container->get(LoggerFactory::class)->get('request');
+
+            // 日志
+            $time = microtime(true) - $time;
+            $debug = 'URI: ' . $request->getUri()->getPath() . PHP_EOL;
+            $debug .= 'TIME: ' . $time . PHP_EOL;
+            if ($customData = $this->getCustomData()) {
+                $debug .= 'DATA: ' . $customData . PHP_EOL;
             }
+            $debug .= 'REQUEST: ' . $this->getRequestString($request) . PHP_EOL;
+            if (isset($response)) {
+                $debug .= 'RESPONSE: ' . $this->getResponseString($response) . PHP_EOL;
+            }
+            if (isset($exception) && $exception instanceof \Throwable) {
+                $debug .= 'EXCEPTION: ' . $exception->getMessage() . PHP_EOL;
+            }
+
+            if ($time > 1) {
+                $logger->error($debug);
+            } else {
+                $logger->info($debug);
+            }
+
+            return $response;
         }
-        if($key){
-            /**
-             * 请求路由
-             */
-            $router = $request->getAttribute(Dispatched::class)->handler->callback;
-            if($router && is_array($router)){
-                $router = implode("@", $router);
-            }
-            $user = $this->userService->getUserAuthInfo($key, $router);
-            if($user){
-                $user = $user->toArray();
-                if($user['create'] && $user['capacity']){
-                    /**
-                     * 设置限流参数
-                     */
-                    $config = ApplicationContext::getContainer()->get(ConfigInterface::class);
-//                    $config->set('rate_limit.key',$key);
-                    $config->set('rate_limit.create',$user['create']);
-                    $config->set('rate_limit.capacity',$user['capacity']);
-                    $rateLimitConfig = $config->get('rate_limit');
-//                    make(ConfigInterface::class,$rateLimitConfig);//这样也可以 会报notice 重复定义常量
-                    Context::set(ConfigInterface::class, $rateLimitConfig);
-                }
-            }
-        }
-        return $handler->handle($request);
+
+//        $params= $request->getParsedBody();
+//        $key = '';
+//        if($params && isset($params['key'])){
+//            $key = $params['key'];
+//        }else{
+//            $params= $request->getQueryParams();
+//            if($params && isset($params['key'])){
+//                $key = $params['key'];
+//            }
+//        }
+//        if($key){
+//            /**
+//             * 请求路由
+//             */
+//            $router = $request->getAttribute(Dispatched::class)->handler->callback;
+//            if($router && is_array($router)){
+//                $router = implode("@", $router);
+//            }
+//            $user = $this->userService->getUserAuthInfo($key, $router);
+//            if($user){
+//                $user = $user->toArray();
+//                if($user['create'] && $user['capacity']){
+//                    /**
+//                     * 设置限流参数
+//                     */
+//                    $config = ApplicationContext::getContainer()->get(ConfigInterface::class);
+////                    $config->set('rate_limit.key',$key);
+//                    $config->set('rate_limit.create',$user['create']);
+//                    $config->set('rate_limit.capacity',$user['capacity']);
+//                    $rateLimitConfig = $config->get('rate_limit');
+////                    make(ConfigInterface::class,$rateLimitConfig);//这样也可以 会报notice 重复定义常量
+//                    Context::set(ConfigInterface::class, $rateLimitConfig);
+//                }
+//            }
+//        }
+//        return $handler->handle($request);
     }
 
+    protected function getResponseString(ResponseInterface $response): string
+    {
+        return (string) $response->getBody();
+    }
+
+    protected function getRequestString(ServerRequestInterface $request): string
+    {
+        $data = $this->container->get(Request::class)->all();
+
+        return Json::encode($data);
+    }
+
+    protected function getCustomData(): string
+    {
+        return '';
+    }
 }
