@@ -22,7 +22,7 @@
         "hyperf/constants": "~2.1.0",
         "hyperf/database": "~2.1.0",
         "hyperf/db-connection": "^2.1",
-        "hyperf/elasticsearch": "~2.1.0",
+        "hyperf/elasticsearch": "^2.1",
         "hyperf/framework": "~2.1.0",
         "hyperf/grpc-client": "~2.1.0",
         "hyperf/grpc-server": "~2.1.0",
@@ -34,6 +34,7 @@
         "hyperf/process": "~2.1.0",
         "hyperf/rate-limit": "^2.1",
         "hyperf/redis": "~2.1.0",
+        "hyperf/scout": "^2.1",
         "hyperf/utils": "2.1.0"
     },
     "require-dev": {

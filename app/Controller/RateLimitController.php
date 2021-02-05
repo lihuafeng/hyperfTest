@@ -75,4 +75,11 @@ class RateLimitController
         throw new ApiException("rate limit", 502);
 //        return $proceedingJoinPoint->process();
     }
+
+    /**
+     * @RequestMapping(path="channel")
+     */
+    public function test_channel(){
+        return [1,3];
+    }
 }

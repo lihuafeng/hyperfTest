@@ -28,7 +28,9 @@ class User extends Model implements CacheableInterface
      *
      * @var array
      */
-    protected $fillable = [];
+    protected $fillable = [
+        'name','email','sex','age'
+    ];
     /**
      * The attributes that should be cast to native types.
      *
