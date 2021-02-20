@@ -16,6 +16,8 @@ use Hyperf\DbConnection\Db;
 use Hyperf\Di\Annotation\Inject;
 use App\Service\UserService;
 use App\Task\MongoTask;
+use Hyperf\Utils\Coroutine;
+use function Hyperf\ViewEngine\view;
 
 /**
  * @Controller(prefix="rate-limit")
@@ -45,13 +47,21 @@ class RateLimitController
      */
     public function taskTest(){
         $client = ApplicationContext::getContainer()->get(MongoTask::class);
-        $client->insert('hyperf.test', ['id' => rand(0, 99999999)]);
+        $client->insert('hyperf.test', ['id' => rand(0, 99999999), 'cid' => Coroutine::id()]);
 
         $result = $client->query('hyperf.test', [], [
             'sort' => ['id' => -1],
             'limit' => 5,
         ]);
         return $result;
+    }
+
+    /**
+     * @RequestMapping(path="view-test")
+     * 页面渲染
+     */
+    public function viewTest(){
+        return (string) view('test',['name' => '李华峰']);
     }
 
     /**
