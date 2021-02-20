@@ -37,7 +37,9 @@
         "hyperf/scout": "^2.1",
         "hyperf/session": "^2.1",
         "hyperf/task": "^2.1",
+        "hyperf/translation": "^2.1",
         "hyperf/utils": "2.1.0",
+        "hyperf/validation": "^2.1",
         "hyperf/view": "^2.1",
         "hyperf/view-engine": "^2.1"
     },
