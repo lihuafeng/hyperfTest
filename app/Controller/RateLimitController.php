@@ -15,6 +15,7 @@ use App\Exception\ApiException;
 use Hyperf\DbConnection\Db;
 use Hyperf\Di\Annotation\Inject;
 use App\Service\UserService;
+use App\Task\MongoTask;
 
 /**
  * @Controller(prefix="rate-limit")
@@ -36,6 +37,21 @@ class RateLimitController
      */
     public function user(UserService $userService){
         return $userService->getAllUserCache();
+    }
+
+    /**
+     * @RequestMapping(path="task-test")
+     * task测试
+     */
+    public function taskTest(){
+        $client = ApplicationContext::getContainer()->get(MongoTask::class);
+        $client->insert('hyperf.test', ['id' => rand(0, 99999999)]);
+
+        $result = $client->query('hyperf.test', [], [
+            'sort' => ['id' => -1],
+            'limit' => 5,
+        ]);
+        return $result;
     }
 
     /**

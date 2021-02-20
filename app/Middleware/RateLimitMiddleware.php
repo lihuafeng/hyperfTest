@@ -72,8 +72,9 @@ class RateLimitMiddleware implements MiddlewareInterface
             } else {
                 $logger->info($debug);
             }
-
-            return $response;
+            if(isset($response)){
+                return $response;
+            }
         }
 
 //        $params= $request->getParsedBody();
