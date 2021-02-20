@@ -25,6 +25,12 @@ use function Hyperf\ViewEngine\view;
 class RateLimitController
 {
     /**
+     * @Inject()
+     * @var \Hyperf\Contract\SessionInterface
+     */
+    private $session;
+
+    /**
      * @RequestMapping(path="test")
      */
     public function test()
@@ -62,6 +68,20 @@ class RateLimitController
      */
     public function viewTest(){
         return (string) view('test',['name' => '李华峰']);
+    }
+
+    /**
+     * @RequestMapping(path="session-test")
+     * session测试
+     */
+    public function sessionTest(){
+        $i = 3;
+        while ($i >0){
+            $this->session->set('session:test:'.$i, $i);
+            $i--;
+        }
+        $res = $this->session->all();
+        return $res;
     }
 
     /**
