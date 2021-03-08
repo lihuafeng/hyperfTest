@@ -1,5 +1,5 @@
 # 案例中主要涉及
-限流、熔断、中间件、模型缓存、异常处理
+限流、熔断、中间件、模型缓存、异常处理、定时任务
 
 应用场景是根据用户组的key，产生不同的限流效果，即不同的令牌桶。
 
@@ -36,6 +36,8 @@
 中间件:RateLimitMiddleware
 
 异常处理:ApiException && ApiExceptionHandler
+
+定时任务:App\Task\CronTask
 
 
 # 框架介绍
