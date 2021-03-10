@@ -6,7 +6,7 @@ use Hyperf\Crontab\Annotation\Crontab;
 use Hyperf\Di\Annotation\Inject;
 
 /**
- * @Crontab(name="CronTask", rule="* * * * *", callback="execute", memo="这是一个示例的定时任务")
+ * @Crontab(name="CronTask", rule="0 6 * * *", callback="execute", memo="这是一个示例的定时任务")
  */
 class CronTask
 {
