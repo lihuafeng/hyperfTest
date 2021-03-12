@@ -11,8 +11,10 @@ declare(strict_types=1);
  */
 return [
     'http' => [
-        \App\Middleware\RateLimitMiddleware::class,
-        \Hyperf\Session\Middleware\SessionMiddleware::class,
-        \Hyperf\Validation\Middleware\ValidationMiddleware::class
+//        \App\Middleware\RateLimitMiddleware::class,
+//        \Hyperf\Session\Middleware\SessionMiddleware::class,
+//        \Hyperf\Validation\Middleware\ValidationMiddleware::class
+
+        \App\Middleware\FooMiddleware::class,
     ],
 ];
