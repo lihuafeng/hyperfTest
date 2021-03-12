@@ -16,6 +16,7 @@ use Hyperf\Di\Annotation\Inject;
 use App\Service\GuzzleService;
 use App\Exception\BusinessException;
 use App\Constants\ErrorCode;
+use App\Service\CacheService;
 
 class IndexController extends AbstractController
 {
@@ -25,9 +26,15 @@ class IndexController extends AbstractController
      */
     protected $service;
 
+    /**
+     * @Inject()
+     * @var CacheService
+     */
+    protected $cacheService;
+
     public function index()
     {
-        $user = $this->request->input('user', 'Hyperf');
+        $user = $this->request->input('user', 'Hyperf11');
         $method = $this->request->getMethod();
 
         return [
@@ -52,5 +59,18 @@ class IndexController extends AbstractController
     {
         sleep(1);
         return $this->response->success('breaking...');
+    }
+
+    /**
+     * 缓存 测试
+     */
+    public function cacheTest(){
+        $res = $this->cacheService->getCache();
+        return $this->response->success($res);
+    }
+
+    public function clearCache(){
+        $res = $this->cacheService->emptyCache();
+        return $this->response->success($res);
     }
 }

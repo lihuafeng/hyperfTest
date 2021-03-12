@@ -35,7 +35,7 @@ class RateLimitController
      */
     public function test()
     {
-        $this->commonAction();
+//        $this->commonAction();
         return ["QPS 1, 峰值3"];
     }
 

@@ -15,6 +15,9 @@ Router::addRoute(['GET', 'POST', 'HEAD'], '/', 'App\Controller\IndexController@i
 Router::addRoute(['GET', 'POST', 'HEAD'], '/breaker', 'App\Controller\IndexController@breaker');
 Router::addRoute(['GET', 'POST', 'HEAD'], '/sleep', 'App\Controller\IndexController@sleep');
 
+Router::addRoute(['GET', 'POST', 'HEAD'], '/cacheClear', 'App\Controller\IndexController@clearCache');
+Router::addRoute(['GET', 'POST', 'HEAD'], '/cacheTest', 'App\Controller\IndexController@cacheTest');
+
 Router::get('/favicon.ico', function () {
     return '';
 });
