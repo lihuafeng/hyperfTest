@@ -9,8 +9,8 @@ use Psr\Http\Message\ResponseInterface;
 use Psr\Http\Server\MiddlewareInterface;
 use Psr\Http\Message\ServerRequestInterface;
 use Psr\Http\Server\RequestHandlerInterface;
-use Hyperf\Utils\Context;
-use Psr\Http\Message\StreamInterface;
+use Hyperf\HttpMessage\Stream\SwooleStream;
+use Hyperf\Utils\Codec\Json;
 
 class BarMiddleware implements MiddlewareInterface
 {
@@ -26,19 +26,12 @@ class BarMiddleware implements MiddlewareInterface
 
     public function process(ServerRequestInterface $request, RequestHandlerInterface $handler): ResponseInterface
     {
-        print_r("#");
-
         $response = $handler->handle($request);
-        print_r("hahahahahahahaha");
-        $contents = $response->getBody()->getContents();
-        $contents = json_decode($contents, true);
-        array_push($contents, 33);
-        $contents = json_encode($contents);
+        $contents = Json::decode($response->getBody()->getContents(), true);
+        array_push($contents, "33");
+        $response = $response->withBody(new SwooleStream(Json::encode($contents)));
 //        Context::set(StreamInterface::class, $contents);
-        $response->getBody()->write($contents); //追加
-        print_r("hahahahahahahaha");
-        print_r($response);
-        print_r("#");
+//        $response->getBody()->write($contents); //追加
         return $response;
     }
 }

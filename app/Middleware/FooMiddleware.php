@@ -41,10 +41,7 @@ class FooMiddleware implements MiddlewareInterface
         // 根据具体业务判断逻辑走向，这里假设用户携带的token有效
         $isValidToken = true;
         if ($isValidToken) {
-            print_r("--");
             $response = $handler->handle($request);
-            print_r($response);
-            print_r("--");
             return $response;
         }
 

@@ -25,7 +25,6 @@ class CommandController extends Controller
      */
     public function index(RequestInterface $request, ResponseInterface $response)
     {
-        print_r("*");
         return ["11","22"];
     }
 }
