@@ -24,7 +24,8 @@ class CacheController extends Controller
 
     public function index(RequestInterface $request, ResponseInterface $response)
     {
-        $res = $this->cacheService->getCache();
+        $nc = 1;
+        $res = $this->cacheService->getCache('haha', 1, $nc);
         return $response->json($res);
     }
 }
