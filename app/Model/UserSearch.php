@@ -14,6 +14,14 @@ class UserSearch extends Model
     use Searchable;
 
     /**
+     * The table associated with the model.
+     *
+     * @var string
+     */
+    protected $table = 'user';
+
+    public $timestamps = false;
+    /**
      * @return string
      * LEJU
      * 2021/2/5
@@ -22,5 +30,20 @@ class UserSearch extends Model
     {
         return 'user_index';
     }
+
+    /**
+     * Get the indexable data array for the model.
+     *
+     * @return array
+     */
+    public function toSearchableArray()
+    {
+        $array = $this->toArray();
+
+        // Customize array...
+
+        return $array;
+    }
+
 
 }

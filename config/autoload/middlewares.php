@@ -15,6 +15,6 @@ return [
 //        \Hyperf\Session\Middleware\SessionMiddleware::class,
 //        \Hyperf\Validation\Middleware\ValidationMiddleware::class
 
-        \App\Middleware\FooMiddleware::class,
+//        \App\Middleware\FooMiddleware::class,
     ],
 ];

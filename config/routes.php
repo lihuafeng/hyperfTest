@@ -18,6 +18,10 @@ Router::addRoute(['GET', 'POST', 'HEAD'], '/sleep', 'App\Controller\IndexControl
 Router::addRoute(['GET', 'POST', 'HEAD'], '/cacheClear', 'App\Controller\IndexController@clearCache');
 Router::addRoute(['GET', 'POST', 'HEAD'], '/cacheTest', 'App\Controller\IndexController@cacheTest');
 
+
+Router::addRoute(['GET', 'POST', 'HEAD'], '/user_save', 'App\Controller\UserController@userSave');
+Router::addRoute(['GET', 'POST', 'HEAD'], '/get_all_user', 'App\Controller\UserController@getAllUser');
+
 Router::get('/favicon.ico', function () {
     return '';
 });
