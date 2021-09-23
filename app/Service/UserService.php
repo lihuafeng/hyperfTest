@@ -42,8 +42,8 @@ class UserService
         $userInfo->save();
     }
 
-    public function getUser(){
-        return make(UserSearch::class)->where('age', '>', 18)->searchable();
+    public function getUserByCondition(){
+        return make(UserSearch::class)->search()->where('age',  18)->raw();
     }
 
     public function getUserByEs(){

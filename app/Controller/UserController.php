@@ -11,6 +11,7 @@ declare(strict_types=1);
  */
 namespace App\Controller;
 
+use App\Service\HouseService;
 use Hyperf\HttpServer\Annotation\AutoController;
 use Hyperf\Di\Annotation\Inject;
 use App\Service\UserService;
@@ -49,9 +50,16 @@ class UserController extends AbstractController
         return make(UserService::class)->update(8);
     }
 
+    public function getUserCondition(){
+        return make(UserService::class)->getUserByCondition();
+    }
+
     public function getAllUser(){
         return make(UserService::class)->getUserByEs();
     }
 
 
+    public function getAllHouse(){
+        return make(HouseService::class)->getHouseByEs();
+    }
 }
