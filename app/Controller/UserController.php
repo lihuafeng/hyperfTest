@@ -62,4 +62,8 @@ class UserController extends AbstractController
     public function getAllHouse(){
         return make(HouseService::class)->getHouseByEs();
     }
+
+    public function getAllEsData(){
+        return make(HouseService::class)->getHouseByEs2();
+    }
 }

@@ -47,8 +47,9 @@ class UserService
     }
 
     public function getUserByEs(){
-//        return make(UserSearch::class)->search()->find(); // 格式化结果
-//        return make(UserSearch::class)->search()->within('user_index')->find(); // 格式化结果 within 限制索引范围
-        return make(UserSearch::class)->search()->raw(); // 原结果
+//        return make(UserSearch::class)->search()->get(); // 格式化结果
+        return make(UserSearch::class)->search()->within('user_index')->get(); // 格式化结果 within 限制索引范围
+//        return make(UserSearch::class)->search()->get(); // 格式化结果 within 限制索引范围
+//        return make(UserSearch::class)->search()->raw(); // 原结果
     }
 }

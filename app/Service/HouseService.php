@@ -16,4 +16,8 @@ class HouseService
     public function getHouseByEs(){
         return make(HouseSearch::class)->search()->raw();
     }
+
+    public function getHouseByEs2(){
+        return make(HouseSearch::class)->search()->get();
+    }
 }

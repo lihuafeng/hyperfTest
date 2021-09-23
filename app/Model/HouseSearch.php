@@ -21,4 +21,27 @@ class HouseSearch extends Model
      */
     protected $table = 'house';
 
+    /**
+     * @return string
+     * LEJU
+     * 2021/2/5
+     */
+    public function searchableAs()
+    {
+        return 'house';
+    }
+
+    /**
+     * Get the indexable data array for the model.
+     *
+     * @return array
+     */
+    public function toSearchableArray()
+    {
+        $array = $this->toArray();
+
+        // Customize array...
+
+        return $array;
+    }
 }
