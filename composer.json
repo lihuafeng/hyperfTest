@@ -42,7 +42,8 @@
         "hyperf/utils": "2.1.0",
         "hyperf/validation": "^2.1",
         "hyperf/view": "^2.1",
-        "hyperf/view-engine": "^2.1"
+        "hyperf/view-engine": "^2.1",
+        "hyperf/watcher": "^2.1"
     },
     "require-dev": {
         "swoole/ide-helper": "^4.5",

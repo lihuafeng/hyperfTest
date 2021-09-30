@@ -39,6 +39,7 @@
 
 定时任务:App\Task\CronTask
 
+开启热重新:php bin/hyperf.php server:watch
 
 # 框架介绍
 
